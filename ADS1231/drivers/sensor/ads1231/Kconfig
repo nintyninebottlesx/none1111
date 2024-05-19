@@ -1,0 +1,76 @@
+# ADS1231 Weight Scale interface Sensor configuration options
+# Copyright (c) 2020 George Gkinis
+# Copyright (c) 2021 Jan Gnip
+# SPDX-License-Identifier: Apache-2.0
+
+menuconfig ADS1231
+	bool "ADS1231 Weight Scale Sensor"
+	depends on GPIO
+	help
+	  Enable driver for the ADS1231 Weight Scale Sensor.
+
+if ADS1231
+
+config ADS1231_OFFSET
+	int "Initial Offset"
+	default 0
+	help
+	  Sensor offset.
+
+config ADS1231_SLOPE_INTEGER
+	int "Initial Slope. Integer part."
+	default 1
+	help
+	  Sensor slope, integer part.
+
+config ADS1231_SLOPE_DECIMAL
+	int "Initial Slope. Decimal part."
+	default 0
+	help
+	  Sensor slope, decimal part.
+
+config ADS1231_CALIBRATION_WEIGHT
+	int "Calibration weight."
+	default 0
+	help
+	  Known weight for calibration purposes.
+
+choice
+	prompt "ADS1231 sampling rate"
+	default ADS1231_RATE_10HZ
+	help
+	  Select sampling rate.
+config ADS1231_RATE_10HZ
+	bool "10Hz"
+config ADS1231_RATE_80HZ
+	bool "80Hz"
+endchoice
+
+config ADS1231_SAMPLING_RATE
+	int "ADS1231 sampling rate"
+	default 0
+	default 0 if ADS1231_RATE_10HZ
+	default 1 if ADS1231_RATE_80HZ
+
+choice
+	prompt "ADS1231 gain"
+	default ADS1231_GAIN_128X
+	help
+	  Select ADS1231 gain.
+config ADS1231_GAIN_128X
+	bool "128x"
+endchoice
+
+config ADS1231_DISABLE_INTERRUPTS_WHILE_POLLING
+	bool "Disable interrupts while polling"
+	help
+	  Disable interrupts while polling for data.
+
+
+config ADS1231_GAIN
+	int
+	default 1
+	default 1 if ADS1231_GAIN_128X
+
+
+endif # ADS1231
